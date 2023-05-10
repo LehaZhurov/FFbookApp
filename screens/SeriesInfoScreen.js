@@ -31,8 +31,8 @@ export default function SeriesInfoScreen({navigation,route}) {
     <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
       <View style = {styles.book}>
-        <Text style = {styles.name}>Книги серии:{book.data.name}</Text>
-        <Text style = {styles.name}>{book.data.error}</Text>
+        <Text style = {styles.h1}>Книги серии:{book.data.name}</Text>
+        <Text style = {styles.h1}>{book.data.error}</Text>
         <FlatList data={book.data} renderItem={({item})=> (
           <View style = {styles.block}>
             <ImageBackground
@@ -51,7 +51,7 @@ export default function SeriesInfoScreen({navigation,route}) {
                 }}
               />
             </ImageBackground>
-            <Text style = {styles.author}>{item.b_name}</Text>
+            <Text style = {styles.span}>{item.b_name}</Text>
             <Button
               key = {item.key}
               title = {'Книга'} 
@@ -63,7 +63,7 @@ export default function SeriesInfoScreen({navigation,route}) {
           </View>
           )} />
         <Text style = {styles.intro}>{book.data.annotation}</Text>
-        <Text style = {styles.author}>{book.data.year}</Text>
+        <Text style = {styles.span}>{book.data.year}</Text>
       </View>
     </ScrollView>
   </SafeAreaView>
@@ -88,11 +88,11 @@ const styles = StyleSheet.create({
     marginTop:10,
     width:'100%'
   },
-  name:{
+  h1:{
       fontSize:30,
       marginRight:20
   },
-  author:{
+  span:{
     fontSize:15,
     margin: 5,
     flex: 1, 

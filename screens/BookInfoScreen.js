@@ -79,7 +79,7 @@ export default function BookInfoScreen({navigation,route}) {
       try {
         let name = book.data.name
         let img  = book.data.img
-        let data = {name:name,img:img,b_code:b_code}
+        let data = {h1:name,img:img,b_code:b_code}
         await AsyncStorage.setItem('@'+b_code,JSON.stringify(data))
       } catch (e) {    
         console.log('Ошибка',e)
@@ -113,7 +113,7 @@ export default function BookInfoScreen({navigation,route}) {
     <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
       <View style = {styles.book}>
-        <Text style = {styles.name}>{book.data.name}</Text>
+        <Text style = {styles.h1}>{book.data.name}</Text>
           <Image
               style={{ width: '100%', height: 500 }}
               source={{
@@ -123,18 +123,18 @@ export default function BookInfoScreen({navigation,route}) {
           <Text style = {styles.h2} >Автор(ы):</Text>
           <FlatList data={book.data.author} renderItem={({item})=> (
               <>
-                <Text style={styles.author}>{item.name}</Text>
+                <Text style={styles.span}>{item.name}</Text>
               </>
             )} 
           />
           <Text style = {styles.h2} >Жанр(ы):</Text>
           <FlatList data={book.data.genre} renderItem={({item})=> (
-              <Text style = {styles.author}>{item.name}</Text>
+              <Text style = {styles.span}>{item.name}</Text>
             )} 
           />
         <Text style = {styles.h2} >Аннотация</Text>
         <Text style = {styles.intro}>{book.data.annotation}</Text>
-        <Text style = {styles.author}>{book.data.year}</Text>
+        <Text style = {styles.span}>{book.data.year}</Text>
         <View style = {styles.panel}>
           <View>
             <Button title={error}
@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
   book:{
       padding: 20 
   },
-  name:{
+  h1:{
       fontSize:30,
       textAlign: 'center',
       // backgroundColor:'#008d83'
   },
-  author:{
+  span:{
       fontSize:15,
       // textAlign: "center",
       marginVertical:10

@@ -30,7 +30,6 @@ export default function GenreScreen({ navigation, route }) {
             </View>
           </SafeAreaView>)
         )
-        console.log(error)
       });
   };
   useEffect(() => {
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%'
   },
-  name: {
+  h1: {
     fontSize: 30,
     marginRight: 20
   },

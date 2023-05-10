@@ -56,8 +56,8 @@ export default function GenreBookScreen({navigation,route}) {
     <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
       <View style = {styles.book}>
-        <Text style = {styles.name}>{book.data.name}</Text>
-        <Text style = {styles.author} >Книги</Text>
+        <Text style = {styles.h1}>{book.data.name}</Text>
+        <Text style = {styles.span} >Книги</Text>
         <View style={styles.paginate}>
           <View style = {styles.list}>
             <FlatList data={pages} horizontal={true} renderItem={({item})=> (
@@ -91,7 +91,7 @@ export default function GenreBookScreen({navigation,route}) {
                     }}
                   />
                 </ImageBackground>
-                <Text style = {styles.author}>{item.b_name}</Text>
+                <Text style = {styles.span}>{item.b_name}</Text>
                 <Button
                   key = {item.key}
                   title = {'Книга'} 
@@ -126,11 +126,11 @@ const styles = StyleSheet.create({
     marginTop:10,
     width:'100%'
   },
-  name:{
+  h1:{
       fontSize:30,
       marginRight:20
   },
-  author:{
+  span:{
     fontSize:15,
     margin: 5,
     flex: 1, 
