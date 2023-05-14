@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, TextInput, StatusBar, SafeAreaView, ScrollView, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import { Dimensions } from 'react-native';
-const win = Dimensions.get('window');
+import { StyleSheet, View, FlatList, TextInput, StatusBar, SafeAreaView, ScrollView, TouchableOpacity, } from 'react-native';
 import { Button, Badge, Icon, Text } from 'react-native-elements';
+import { MiniBookPreview } from '../elements/Book/MiniBookPreview';
+import { AuthorListElement } from '../elements/Author/AuthorListElement';
 export default function SearchPageScreen({ navigation, route }) {
 
   const [query, setQuery] = useState('');
@@ -13,7 +13,7 @@ export default function SearchPageScreen({ navigation, route }) {
   const [SA, setSA] = useState(0)
   const [SS, setSS] = useState(0)
   const [display, setDis] = useState({ opacity: 0 })
-  
+
   const AllSearch = (query, page) => {
     if (query[0]) {
       setBook({ data: { 'name': 'Загрузка' } })
@@ -208,52 +208,21 @@ export default function SearchPageScreen({ navigation, route }) {
               onPress={() => { AllSearch(query, 0) }}
             />
           </View>
-          <Text style={styles.h2}>
-            {book.data.name}
-          </Text>
-          <FlatList style={{ width: '100%' }} data={book.data.book} renderItem={({ item }) => (
-            <View style={styles.block} key={item.b_code}>
-              <ImageBackground
-                style={{ width: 100, height: 150 }}
-                source={{
-                  uri: 'https://cm.author.today/content/2020/09/26/9a0b730762aa4398a8e8fc6f26168a83.jpg?width=265&height=400&mode=max'
-                }}
-              >
-                <Image
-                  style={{ width: 100, height: 150 }}
-                  source={{
-                    uri: item.b_cover
-                  }}
-                  defaultSource={{
-                    uri: 'https://flibusta.club/img/no_cover.jpg'
-                  }}
-                />
-              </ImageBackground>
-              <Text style={styles.h1}>{item.b_name}</Text>
-              <Button
-                key={item.key}
-                title={'Книга'}
-                onPress={() => {
-                  navigation.navigate('Аннотация', { 'b_code': item.b_code })
-                }}
-                buttonStyle={styles.page_but}
-              />
-            </View>
-          )} />
-          <FlatList data={book.data.auto} renderItem={({ item }) => (
-            <>
-              <View style={styles.block} key={item.a_code}>
-                <Text style={styles.h1}>{item.a_name}</Text>
-                <Button
-                  title={'Автор'}
-                  onPress={() => {
-                    navigation.navigate('Книги Автора', { 'a_code': item.a_code });
-                  }}
-                  buttonStyle={styles.page_but}
-                />
-              </View>
-            </>
-          )} />
+          <FlatList
+            data={book.data.book}
+            style={{}}
+            renderItem={({ item }) => (
+              MiniBookPreview(item, navigation)
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <FlatList
+            data={book.data.auto}
+            renderItem={({ item }) => (
+              AuthorListElement(item, navigation)
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
           <FlatList data={book.data.series} renderItem={({ item }) => (
             <>
               <View style={styles.block} key={item.s_code}>
@@ -268,33 +237,6 @@ export default function SearchPageScreen({ navigation, route }) {
               </View>
             </>
           )} />
-          <View style={styles.paginate, display}>
-            <Button
-              title={''}
-              onPress={downPage}
-              icon={<Icon name="arrow-back" color="#008d83" iconStyle={{ marginRight: 10 }} />}
-              buttonStyle={{
-                borderColor: '#f2f2f2',
-              }}
-              type="outline"
-              titleStyle={{ color: 'rgba(78, 116, 289, 1)' }}
-            />
-            <Badge
-              textStyle={{ fontSize: 20 }}
-              badgeStyle={styles.page}
-              value={page + 1}
-              status="primary"
-            />
-            <Button
-              title={''}
-              onPress={upPage}
-              icon={<Icon name="arrow-forward" color="#008d83" iconStyle={{ marginRight: 10 }} />}
-              buttonStyle={{
-                borderColor: '#f2f2f2',
-              }}
-              type="outline"
-            />
-          </View>
         </ScrollView>
       </SafeAreaView>
     </>
@@ -303,8 +245,6 @@ export default function SearchPageScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   img: {
-    //   height : ratio, 
-    //   width: "100%",
     resizeMode: 'contain'
 
   },
@@ -316,7 +256,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   but: {
-    // margin:10,
     borderRadius: 50,
     color: 'rgb(32, 137, 220)',
     flexShrink: 1, flexWrap: 'wrap'
@@ -348,8 +287,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   input: {
-    // margin: 20,
-    // height : 60,
     marginTop: 40,
     marginRight: 20,
     marginLeft: 20,
@@ -358,7 +295,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // width: '90%',
     paddingTop: StatusBar.currentHeight,
     margin: 10
   },
@@ -375,13 +311,9 @@ const styles = StyleSheet.create({
   block_search_from: {
     margin: 10,
     flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
   sort_item: {
     marginLeft: 10,
-    // padding:10,
-    // flex:1,
-    // alignItems: 'center',
   },
   sort_item_text: {
     color: '#008d83'

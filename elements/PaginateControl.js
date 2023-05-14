@@ -3,31 +3,26 @@ import * as React from 'react';
 import { Button, Text, Icon } from 'react-native-elements';
 
 
-
-export function PaginateControl({ page, downPage, upPage }) {
+export const PaginateControl = ({ page, downPage, upPage }) => {
     return (
         <View style={styles.paginate}>
             <Button
                 title={''}
                 onPress={downPage}
                 icon={<Icon name="arrow-back" color="#008d83" iconStyle={{ marginRight: 10 }} />}
-                buttonStyle={{
-                    borderColor: '#f2f2f2',
-                }}
+                buttonStyle={styles.buttonStyle}
                 type="outline"
-                titleStyle={{ color: 'rgba(78, 116, 289, 1)' }}
-                containerStyle={{
-                    // marginHorizontal: 50,
-                }}
             />
+            {/* <View style={styles.pageNum}> */}
+            <Text style={styles.num} onPress={downPage} >{page}</Text>
             <Text style={styles.num}>{page + 1}</Text>
+            <Text style={styles.num} onPress={upPage} >{page + 2}</Text>
+            {/* </View> */}
             <Button
                 title={''}
                 onPress={upPage}
                 icon={<Icon name="arrow-forward" color="#008d83" iconStyle={{ marginRight: 10 }} />}
-                buttonStyle={{
-                    borderColor: '#f2f2f2',
-                }}
+                buttonStyle={styles.buttonStyle}
                 type="outline"
             />
         </View>
@@ -41,11 +36,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row'
     },
-    page: {
-        width: 30,
+    num: {
         fontSize: 20,
-        backgroundColor: '#008d83',
-        fontSize: '30px',
-        color: 'white'
+        color: '#008d83'
+    },
+    pageNum: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    buttonStyle: {
+        borderColor: '#f2f2f2',
     }
 });

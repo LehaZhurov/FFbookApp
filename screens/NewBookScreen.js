@@ -37,6 +37,7 @@ export default function NewBookScreen({ navigation }) {
         renderItem={({ item }) => (
           BookPreview(item, navigation)
         )}
+        keyExtractor={(item, index) => index.toString()}
       />
     ))
   }, [book])

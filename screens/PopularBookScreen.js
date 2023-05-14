@@ -58,6 +58,7 @@ export default function PopularBookScreen({ navigation }) {
         renderItem={({ item }) => (
           BookPreview(item, navigation)
         )}
+        keyExtractor={(item, index) => index.toString()}
       />
       <PaginateControl page={page} downPage={downPage} upPage={upPage} />
     </>
