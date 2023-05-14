@@ -4,6 +4,7 @@ import { Button, Text, Icon } from 'react-native-elements';
 
 
 export const PaginateControl = ({ page, downPage, upPage }) => {
+
     return (
         <View style={styles.paginate}>
             <Button
@@ -13,11 +14,7 @@ export const PaginateControl = ({ page, downPage, upPage }) => {
                 buttonStyle={styles.buttonStyle}
                 type="outline"
             />
-            {/* <View style={styles.pageNum}> */}
-            <Text style={styles.num} onPress={downPage} >{page}</Text>
             <Text style={styles.num}>{page + 1}</Text>
-            <Text style={styles.num} onPress={upPage} >{page + 2}</Text>
-            {/* </View> */}
             <Button
                 title={''}
                 onPress={upPage}

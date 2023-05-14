@@ -3,15 +3,15 @@ import * as React from 'react';
 
 
 
-export function AuthorListElement(author, navigation) {
+export function SeriesListElement(series, navigation) {
     return (<>
-        <View style={styles.block} key={author.a_code}>
+        <View style={styles.block} key={series.s_code}>
             <Text
                 style={styles.h1}
                 onPress={() => {
-                    navigation.navigate('Книги Автора', { 'a_code': author.a_code });
+                    navigation.navigate('Книги Серии', { 's_code': series.s_code });
                 }}>
-                {author.a_name}
+                {series.s_name}
             </Text>
         </View>
     </>);

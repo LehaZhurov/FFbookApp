@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { View, StatusBar, StyleSheet } from 'react-native';
+import { View, StatusBar, StyleSheet, Text } from 'react-native';
 
 
 
 export function NotResponse() {
   return (
     <View style={[styles.container, styles.horizontal]} >
-      <ActivityIndicator size="large" color="#008d83" />
+      <Text>Нет подключения</Text>
     </View >
   )
 }
@@ -25,5 +25,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
   },
- 
+
 });
