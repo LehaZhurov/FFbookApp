@@ -10,33 +10,32 @@ export default function PopularBookScreen({ navigation }) {
 
   const [book, setBook] = useState({ data: [{ 'name': '', 'author': '' }] });
   const [page, setPage] = useState(0);
-  const [murkup, setMarkup] = useState(LoadScreen());
+  const [murkup, setMarkup] = useState(<LoadScreen />);
 
 
-  const GetPopularBook = (page) => {
-
-    fetch('http://flibapi.tmweb.ru/get_popular_book/' + page, {
-      method: 'GET',
-    })
+  const GetPopularBook = async (page) => {
+    let url = 'http://flibapi.tmweb.ru/get_popular_book/' + page;
+    let response = await fetch(url, { method: 'GET', })
       .then((response) => response.json())
       .then((responseJson) => {
-        setBook({
-          data: responseJson
-        })
+        return responseJson;
       })
       .catch((error) => {
-        setMarkup(NotResponse());
+        setMarkup(<NotResponse />);
       });
+    setBook({
+      data: response
+    })
   };
 
   const upPage = () => {
-    setMarkup(LoadScreen());
+    setMarkup(<LoadScreen />);
     GetPopularBook(page + 1)
     setPage(page + 1);
   }
 
   const downPage = () => {
-    setMarkup(LoadScreen());
+    setMarkup(<LoadScreen />);
     if (page != 0) {
       GetPopularBook(page - 1)
       setPage(page - 1);
@@ -56,7 +55,7 @@ export default function PopularBookScreen({ navigation }) {
         data={book.data}
         style={{}}
         renderItem={({ item }) => (
-          BookPreview(item, navigation)
+          <BookPreview book={item} navigation={navigation} />
         )}
         keyExtractor={(item, index) => index.toString()}
       />

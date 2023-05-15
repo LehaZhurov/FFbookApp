@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 
-export function SeriesListElement(series, navigation) {
+export function SeriesListElement({series, navigation}) {
     return (<>
         <View style={styles.block} key={series.s_code}>
             <Text

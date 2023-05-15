@@ -4,7 +4,7 @@ import { Text } from 'react-native-elements';
 
 
 
-export function MiniBookPreview(book, navigation) {
+export function MiniBookPreview({ book, navigation }) {
     return (<>
         <View style={styles.block} key={book.b_code} >
             <Image

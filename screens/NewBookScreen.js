@@ -9,33 +9,37 @@ import { LoadScreen } from '../elements/LoadScreen';
 export default function NewBookScreen({ navigation }) {
 
   const [book, setBook] = useState({ data: [{ 'name': '', 'author': '' }] });
-  const [murkup, setMarkup] = useState(LoadScreen());
+  const [murkup, setMarkup] = useState(<LoadScreen />);
 
 
-  const getNewBook = () => {
-    fetch('http://flibapi.tmweb.ru/get_new_book', {
+  const getNewBook = async () => {
+    let url = 'http://flibapi.tmweb.ru/get_new_book';
+    let response = await fetch(url, {
       method: 'GET',
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setBook({
-          data: responseJson
-        })
+        return responseJson;
       })
       .catch((error) => {
-        setMarkup(NotResponse());
+        setMarkup(<NotResponse />);
       });
+    setBook({
+      data: response
+    })
   };
+
   useEffect(() => {
     getNewBook()
   }, [])
+
   useEffect(() => {
     setMarkup((
       <FlatList
         data={book.data}
         style={{}}
         renderItem={({ item }) => (
-          BookPreview(item, navigation)
+          <BookPreview book={item} navigation={navigation} />
         )}
         keyExtractor={(item, index) => index.toString()}
       />

@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-elements';
 
 
 
-export function BookPreview(book, navigation) {
+export function BookPreview({ book, navigation }) {
   return (
     <Card>
       <Card.Title>{book.name}</Card.Title>

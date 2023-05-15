@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 
-export function AuthorListElement(author, navigation) {
+export function AuthorListElement({author, navigation}) {
     return (<>
         <View style={styles.block} key={author.a_code}>
             <Text

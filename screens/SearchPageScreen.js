@@ -6,18 +6,18 @@ import { MiniBookPreview } from '../elements/Book/MiniBookPreview';
 import { AuthorListElement } from '../elements/Author/AuthorListElement';
 import { SeriesListElement } from '../elements/Series/SeriesListElement';
 import { PaginateControl } from '../elements/paginateControl';
+import { LoadScreen } from '../elements/LoadScreen';
 
 export default function SearchPageScreen({ navigation }) {
-
   const [query, setQuery] = useState('');
   const [book, setBook] = useState({ data: { 'name': 'Найдется все,но не точно' } });
   const [page, setPage] = useState(0);
-  const [display, setDis] = useState({ opacity: 0 })
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('none');
+  const [murkup, setMarkup] = useState(<LoadScreen />);
 
   const Search = async (filter, query, page) => {
     if (query[0]) {
-      setBook({ data: { 'name': 'Загрузка' } })
+      setMarkup(<LoadScreen />)
     } else {
       setBook({ data: { 'name': 'Заполните поле' } })
       return true
@@ -43,6 +43,7 @@ export default function SearchPageScreen({ navigation }) {
         setBook({ data: { 'name': 'Нет интернета' } })
       });
     if (response.error) {
+      Search(filter, query, 0);
       return;
     }
     if (filter == 'all') {
@@ -51,10 +52,8 @@ export default function SearchPageScreen({ navigation }) {
       setBook({ data: { book: response } })
     } else if (filter == 'author') {
       setBook({ data: { auto: response } })
-
     } else if (filter == 'series') {
       setBook({ data: { series: response } })
-
     }
     setPage(page)
     return true;
@@ -77,59 +76,116 @@ export default function SearchPageScreen({ navigation }) {
     Search(filter, query, thispage);
   }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <View>
-          <TextInput
-            placeholder="Поиск"
-            blurOnSubmit
-            autoCorrect={false}
-            maxLength={30}
-            autoCapitalized="words"
-            style={styles.input}
-            onChangeText={(text) => setQuery(text)}
-          />
-          <View style={styles.block_search_from}>
-            <Text>Поиск по:</Text>
-            <TouchableOpacity style={styles.sort_item} onPress={async () => { Search('book', query, 0) }}><Text style={styles.sort_item_text}>Книгам</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.sort_item} onPress={async () => { Search('author', query, 0) }}><Text style={styles.sort_item_text}>Авторам</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.sort_item} onPress={async () => { Search('series', query, 0) }}><Text style={styles.sort_item_text}>Сериям</Text></TouchableOpacity>
+  const BookList = () => {
+    return (<>
+      <Text style={styles.h1}>Книги</Text>
+      <FlatList
+        data={book.data.book}
+        style={{}}
+        renderItem={({ item }) => (
+          <MiniBookPreview book={item} navigation={navigation} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </>);
+  }
+
+  const AuthorList = () => {
+    return (<>
+      <Text style={styles.h1}>Авторы</Text>
+      <FlatList
+        data={book.data.auto}
+        renderItem={({ item }) => (
+          <AuthorListElement author={item} navigation={navigation} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </>);
+  }
+
+  const SeriesList = () => {
+    return (<>
+      <Text style={styles.h1}>Серии</Text>
+      <FlatList
+        data={book.data.series}
+        renderItem={({ item }) => (
+          <SeriesListElement series={item} navigation={navigation} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </>);
+  }
+
+  const Lists = () => {
+    if (filter == 'all') {
+      return (<>
+        <BookList />
+        <AuthorList />
+        <SeriesList />
+      </>);
+    } else if (filter == 'book') {
+      return (
+        <BookList />
+      );
+    } else if (filter == 'author') {
+      return (
+        <AuthorList />
+      );
+    } else if (filter == 'series') {
+      return (
+        <SeriesList />
+      );
+    }
+  }
+
+  useEffect(() => {
+    setMarkup(<>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          <View>
+            <TextInput
+              placeholder="Поиск"
+              blurOnSubmit
+              autoCorrect={false}
+              maxLength={30}
+              autoCapitalized="words"
+              style={styles.input}
+              onChangeText={(text) => setQuery(text)}
+            />
+            <View style={styles.block_search_from}>
+              <Text>Поиск по:</Text>
+              <TouchableOpacity
+                style={styles.sort_item}
+                onPress={async () => { Search('book', query, 0) }}
+              >
+                <Text style={styles.sort_item_text}>Книгам</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.sort_item}
+                onPress={async () => { Search('author', query, 0) }}
+              >
+                <Text style={styles.sort_item_text}>Авторам</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.sort_item}
+                onPress={async () => { Search('series', query, 0) }}
+              >
+                <Text style={styles.sort_item_text}>Сериям</Text>
+              </TouchableOpacity>
+            </View>
+            <Button
+              buttonStyle={styles.but_search}
+              title={'Искать везде'}
+              onPress={() => { Search('all', query, 0) }}
+            />
           </View>
-          <Button
-            buttonStyle={styles.but_search}
-            title={'Искать везде'}
-            onPress={() => { Search('all', query, 0) }}
-          />
-        </View>
-        <FlatList
-          data={book.data.book}
-          style={{}}
-          renderItem={({ item }) => (
-            MiniBookPreview(item, navigation)
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <FlatList
-          data={book.data.auto}
-          renderItem={({ item }) => (
-            AuthorListElement(item, navigation)
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <FlatList
-          data={book.data.series}
-          renderItem={({ item }) => (
-            SeriesListElement(item, navigation)
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </ScrollView>
-      <PaginateControl page={page} downPage={downPage} upPage={upPage} />
-    </SafeAreaView>
-
-  )
-
+          <Lists />
+        </ScrollView>
+        <PaginateControl page={page} downPage={downPage} upPage={upPage} />
+      </SafeAreaView>
+    </>)
+  }, [book])
+  return murkup;
 }
 
 const styles = StyleSheet.create({
@@ -163,5 +219,9 @@ const styles = StyleSheet.create({
   },
   sort_item_text: {
     color: '#008d83'
+  },
+  h1: {
+    fontSize: 30,
+    marginRight: 20
   },
 });
