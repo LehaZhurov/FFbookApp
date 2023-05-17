@@ -11,12 +11,9 @@ const Stack = createNativeStackNavigator();
 
 export default function GenreNavigate() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-      }}
-    >
+    <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
-        name={'Жанры'}
+        name={'Список Жанров'}
         component={GenreScreen}
         options={HeaderScreenStyles()}
       />

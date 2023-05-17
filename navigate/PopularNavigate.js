@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 
 export default function PopularNavigate() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
         key={435}
         name={'Сейчас читают'}

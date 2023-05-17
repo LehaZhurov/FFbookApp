@@ -11,10 +11,7 @@ const Stack = createNativeStackNavigator();
 
 export default function HomeNavigate() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-      }}
-    >
+    <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
         name={'Новинки'}
         component={NewBookScreen}

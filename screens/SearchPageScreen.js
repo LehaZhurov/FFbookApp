@@ -7,7 +7,7 @@ import { AuthorListElement } from '../elements/Author/AuthorListElement';
 import { SeriesListElement } from '../elements/Series/SeriesListElement';
 import { PaginateControl } from '../elements/paginateControl';
 import { LoadScreen } from '../elements/LoadScreen';
-
+import { NotResponse } from '../elements/NotResponse';
 export default function SearchPageScreen({ navigation }) {
   const [query, setQuery] = useState('');
   const [book, setBook] = useState({ data: { 'name': 'Найдется все,но не точно' } });
@@ -19,7 +19,7 @@ export default function SearchPageScreen({ navigation }) {
     if (query[0]) {
       setMarkup(<LoadScreen />)
     } else {
-      setBook({ data: { 'name': 'Заполните поле' } })
+      setBook({ data: { 'name': 'Заполните поле' } })//Поправить
       return true
     }
     setFilter(filter);
@@ -40,12 +40,14 @@ export default function SearchPageScreen({ navigation }) {
         return responseJson;
       })
       .catch((error) => {
-        setBook({ data: { 'name': 'Нет интернета' } })
+        setMarkup(<NotResponse />)
       });
+
     if (response.error) {
       Search(filter, query, 0);
       return;
     }
+
     if (filter == 'all') {
       setBook({ data: response })
     } else if (filter == 'book') {
@@ -55,16 +57,17 @@ export default function SearchPageScreen({ navigation }) {
     } else if (filter == 'series') {
       setBook({ data: { series: response } })
     }
+    
     setPage(page)
     return true;
   };
-
 
   const upPage = () => {
     let thispage = page + 1
     Search(filter, query, thispage);
     setPage(thispage);
   }
+
   const downPage = () => {
     let thispage = page - 1
     if (page != 0) {

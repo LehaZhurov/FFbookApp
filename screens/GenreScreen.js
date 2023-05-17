@@ -7,17 +7,17 @@ import { NotResponse } from '../elements/NotResponse';
 
 export default function GenreScreen({ navigation, route }) {
   const [genre, setGenre] = useState({ data: [{ 'name': 'Загрузка' }] });
-  const [genreMarkup, setGenreMarkup] = useState(<LoadScreen />);
+  const [murkup, setMurkup] = useState(<LoadScreen />);
+
   const getGenre = () => {
-    fetch('http://flibapi.tmweb.ru/get_genre', { method: 'GET', })
+    let url = 'http://flibapi.tmweb.ru/get_genre';
+    fetch(url, { method: 'GET', })
       .then((response) => response.json())
       .then((responseJson) => {
-        setGenre({
-          data: responseJson
-        })
+        setGenre({ data: responseJson })
       })
       .catch((error) => {
-        setGenreMarkup(<NotResponse />)
+        setMurkup(<NotResponse />)
       });
   };
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function GenreScreen({ navigation, route }) {
   }, [])
 
   useEffect(() => {
-    setGenreMarkup(
+    setMurkup(
       (<SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View>
@@ -42,7 +42,7 @@ export default function GenreScreen({ navigation, route }) {
     )
   }, [genre])
   return (
-    genreMarkup
+    murkup
   );
 }
 

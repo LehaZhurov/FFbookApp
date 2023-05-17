@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 export default function SearchNavigate() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
         name={'Что ищем?'}
         component={SearchPageScreen}

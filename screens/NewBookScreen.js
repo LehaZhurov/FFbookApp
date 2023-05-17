@@ -24,9 +24,7 @@ export default function NewBookScreen({ navigation }) {
       .catch((error) => {
         setMarkup(<NotResponse />);
       });
-    setBook({
-      data: response
-    })
+    setBook({ data: response })
   };
 
   useEffect(() => {

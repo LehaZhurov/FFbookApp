@@ -23,9 +23,7 @@ export default function PopularBookScreen({ navigation }) {
       .catch((error) => {
         setMarkup(<NotResponse />);
       });
-    setBook({
-      data: response
-    })
+    setBook({ data: response })
   };
 
   const upPage = () => {

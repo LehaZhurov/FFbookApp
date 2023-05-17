@@ -14,25 +14,6 @@ export default function BookInfoScreen({navigation,route}) {
   const [ready,setReady] = useState({r:true});
   const b_code = route.params.b_code;
 
-  const zaebalo = () =>{
-      Alert.alert(
-  
-    // This is Alert Dialog Title
-    'Бесплатная версия',
- 
-    // This is Alert Dialog Message. 
-    'Вы используете пробную версию приложения.Полная версия доступна по клику на кнопку купить',
-    [
-      // First Text Button in Alert Dialog.
-      {text: 'Купить полную версию', onPress: () => Linking.openURL('https://payhip.com/b/W84z3')}, 
-      // Third OK Button in Alert Dialog
-      {text: 'OK', onPress: () => Linking.openURL(book_url)},
-      
-    ]
- 
-    )  
-  }
-
   const getBookInfo = (b_code) => {
     fetch('http://flibapi.tmweb.ru/get_book_info/'+b_code, {})
       .then((response) => response.json())

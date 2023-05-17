@@ -1,10 +1,12 @@
 import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
 import * as React from 'react';
-import { Button, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { useState, useEffect } from 'react';
 import { MiniBookPreview } from '../elements/Book/MiniBookPreview';
 import { LoadScreen } from '../elements/LoadScreen';
 import { NotResponse } from '../elements/NotResponse';
+import { PagesPaginate } from '../elements/PagesPaginate';
+
 export default function AutoInfoScreen({ navigation, route }) {
   const [author, setAuthor] = useState({ data: { name: '', discription: '' } });
   const [pages, setPage] = useState();
@@ -13,7 +15,7 @@ export default function AutoInfoScreen({ navigation, route }) {
 
   const getAutoBook = (a_code) => {
     let url = 'http://flibapi.tmweb.ru/get_book_author/' + a_code;
-    let response = fetch(url, { method: 'GET', })
+    fetch(url, { method: 'GET', })
       .then((response) => response.json())
       .then((responseJson) => {
         setAuthor({ data: responseJson });
@@ -47,35 +49,14 @@ export default function AutoInfoScreen({ navigation, route }) {
     getAutoBook(route.params.a_code, 0)
   }, [])
 
-  const Paginate = () => {
-    return (
-      <View style={styles.paginate}>
-        <View style={styles.list}>
-          <FlatList data={pages} horizontal={true} renderItem={({ item }) => (
-            <Button
-              key={item.key}
-              title={item.i + 1}
-              onPress={() => {
-                paginate(author.data.book, item.i)
-              }}
-              buttonStyle={styles.but_p}
-            />
-          )}
-          />
-        </View>
-      </View>
-    );
-  }
-
   useEffect(() => {
     setMurkup(
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.body}>
-            <Text style={styles.span}>{author.data.name && author.data.name ? 'Автор:' + author.data.name : ''}</Text>
-            <Text style={styles.span}>{author.data.discription && author.data.discription ? 'О себе:' + author.data.discription : ''}</Text>
+            <Text style={styles.h1}>{author.data.name && author.data.name ? author.data.name : 'Кто-то'}</Text>
             <Text style={styles.h1} >Книги</Text>
-            <Paginate />
+            <PagesPaginate collection={author.data.book} paginator={paginate} pages={pages} />
             <FlatList data={books} renderItem={({ item }) => (
               <MiniBookPreview book={item} navigation={navigation} />
             )} />
@@ -120,21 +101,4 @@ const styles = StyleSheet.create({
   but: {
     backgroundColor: '#008d83',
   },
-  paginate: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20
-  },
-  list: {
-    width: '100%',
-
-  },
-  but_p: {
-    width: 50,
-    padding: 5,
-    borderRadius: 0,
-    backgroundColor: '#008d83',
-  }
 });
