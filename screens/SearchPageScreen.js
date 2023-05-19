@@ -8,20 +8,24 @@ import { SeriesListElement } from '../elements/Series/SeriesListElement';
 import { PaginateControl } from '../elements/paginateControl';
 import { LoadScreen } from '../elements/LoadScreen';
 import { NotResponse } from '../elements/NotResponse';
+import { ScreenMessage } from '../elements/ScreenMessage';
+
 export default function SearchPageScreen({ navigation }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('Такие дела');
   const [book, setBook] = useState({ data: { 'name': 'Найдется все,но не точно' } });
   const [page, setPage] = useState(0);
   const [filter, setFilter] = useState('none');
   const [murkup, setMarkup] = useState(<LoadScreen />);
+  const [screenMessage, setMessage] = useState();
 
   const Search = async (filter, query, page) => {
-    if (query[0]) {
-      setMarkup(<LoadScreen />)
-    } else {
-      setBook({ data: { 'name': 'Заполните поле' } })//Поправить
+    if (!query) {
+      setMessage('Заполните поле');
       return true
+    } else {
+      setMessage('Запрос:' + query);
     }
+    setMarkup(<LoadScreen />)
     setFilter(filter);
     let url = '';
     if (filter == 'all') {
@@ -44,10 +48,10 @@ export default function SearchPageScreen({ navigation }) {
       });
 
     if (response.error) {
-      Search(filter, query, 0);
+      setBook({})
+      setMessage('Нечего не найдено');
       return;
     }
-
     if (filter == 'all') {
       setBook({ data: response })
     } else if (filter == 'book') {
@@ -57,7 +61,7 @@ export default function SearchPageScreen({ navigation }) {
     } else if (filter == 'series') {
       setBook({ data: { series: response } })
     }
-    
+
     setPage(page)
     return true;
   };
@@ -80,6 +84,9 @@ export default function SearchPageScreen({ navigation }) {
   }
 
   const BookList = () => {
+    if (book.data == undefined) {
+      return false;
+    }
     return (<>
       <Text style={styles.h1}>Книги</Text>
       <FlatList
@@ -94,6 +101,9 @@ export default function SearchPageScreen({ navigation }) {
   }
 
   const AuthorList = () => {
+    if (book.data == undefined) {
+      return false;
+    }
     return (<>
       <Text style={styles.h1}>Авторы</Text>
       <FlatList
@@ -107,6 +117,9 @@ export default function SearchPageScreen({ navigation }) {
   }
 
   const SeriesList = () => {
+    if (book.data == undefined) {
+      return false;
+    }
     return (<>
       <Text style={styles.h1}>Серии</Text>
       <FlatList
@@ -182,12 +195,13 @@ export default function SearchPageScreen({ navigation }) {
               onPress={() => { Search('all', query, 0) }}
             />
           </View>
+          <ScreenMessage message={screenMessage} />
           <Lists />
         </ScrollView>
         <PaginateControl page={page} downPage={downPage} upPage={upPage} />
       </SafeAreaView>
     </>)
-  }, [book])
+  }, [book, screenMessage])
   return murkup;
 }
 

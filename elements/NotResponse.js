@@ -6,7 +6,7 @@ import { View, StatusBar, StyleSheet, Text } from 'react-native';
 export function NotResponse() {
   return (
     <View style={[styles.container, styles.horizontal]} >
-      <Text>Нет подключения</Text>
+      <Text style={styles.text}>Нет подключения</Text>
     </View >
   )
 }
@@ -25,5 +25,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
   },
-
+  text: {
+    textAlign: 'center',
+    fontSize: 20
+  }
 });

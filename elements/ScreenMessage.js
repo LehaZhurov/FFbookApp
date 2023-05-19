@@ -3,10 +3,10 @@ import { View, StatusBar, StyleSheet, Text } from 'react-native';
 
 
 
-export function NotFound() {
+export function ScreenMessage({ message }) {
     return (
         <View style={[styles.container, styles.horizontal]} >
-            <Text style={styles.text}>Не найдено</Text>
+            <Text style={styles.text}>{message}</Text>
         </View >
     )
 }
