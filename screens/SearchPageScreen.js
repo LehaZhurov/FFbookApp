@@ -11,6 +11,7 @@ import { NotResponse } from '../elements/NotResponse';
 import { ScreenMessage } from '../elements/ScreenMessage';
 
 export default function SearchPageScreen({ navigation }) {
+
   const [query, setQuery] = useState('Такие дела');
   const [book, setBook] = useState({ data: { 'name': 'Найдется все,но не точно' } });
   const [page, setPage] = useState(0);
@@ -19,7 +20,7 @@ export default function SearchPageScreen({ navigation }) {
   const [screenMessage, setMessage] = useState();
 
   const Search = async (filter, query, page) => {
-    if (!query) {
+    if (!query[0]) {
       setMessage('Заполните поле');
       return true
     } else {

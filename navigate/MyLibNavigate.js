@@ -15,7 +15,7 @@ export default function MyLibNavigate() {
   return (
     <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
-        name={'Моя библиотека'}
+        name={'Избранное'}
         component={MyLibScreen}
         options={HeaderScreenStyles()}
       />

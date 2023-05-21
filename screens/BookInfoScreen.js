@@ -1,18 +1,18 @@
-import { StyleSheet, View, SafeAreaView, Image, ScrollView, StatusBar, FlatList, Linking, TouchableOpacity, Alert } from 'react-native';
 import * as React from 'react';
+import { StyleSheet, View, SafeAreaView, Image, ScrollView, StatusBar, FlatList, Linking, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Button, Text } from 'react-native-elements';
 import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppendBookInLibrary } from '../function/book/AppendBookInLibrary';
 import { RemoveBookInLibrary } from '../function/book/RemoveBookInLibrary';
+import { BookAddedInLibrary } from '../function/book/BookAddedInLibrary';
 import { LoadScreen } from '../elements/LoadScreen';
 import { NotFound } from '../elements/NotFound';
 
-export default function BookInfoScreen({ navigation, route }) {
+export default function BookInfoScreen({ route }) {
 
-  const [color, setColor] = useState('white');
-  const [book, setBook] = useState({ data: { 'name': 'Загрузка' } });
+  const [buttonColor, setButtonColor] = useState('white');
+  const [book, setBook] = useState({ data: {} });
   const [bookDownloadUrl, setBookUrl] = useState('');
   const [downloadButtonText, setDownloadButtonText] = useState('Подготовка к загрузке');
   const [bookReady, setBookReady] = useState({ r: false });
@@ -29,7 +29,6 @@ export default function BookInfoScreen({ navigation, route }) {
       .catch((error) => {
         setMurkup(<NotFound />)
       });
-    console.log(response);
     setBook({ data: response });
   };
 
@@ -54,29 +53,27 @@ export default function BookInfoScreen({ navigation, route }) {
   }
 
   const SaveLovers = (book) => {
-    if (color == 'white') {
-      setColor('#008d83')
-      AppendBookInLibrary(book)
+    if (buttonColor == 'white') {
+      setButtonColor('#008d83')
+      AppendBookInLibrary(book, b_code)
     } else {
-      setColor('white')
-      RemoveBookInLibrary(book)
+      setButtonColor('white')
+      RemoveBookInLibrary(b_code)
     }
   }
 
-  const IfBookAppend = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@' + b_code)
-      if (value !== null) {
-        setColor('#008d83')
-        console.log(value);
-      }
-    } catch (error) {
-      console.log(error);
+  const ReColorButton = async () => {
+    let added = await BookAddedInLibrary(b_code);
+    console.log(added);
+    if (added == true) {
+      setButtonColor('#008d83')
+    } else {
+      setButtonColor('white');
     }
   }
 
   useEffect(() => {
-    IfBookAppend()
+    ReColorButton()
     GetBookInfo(b_code)
     GetLinkBook(b_code)
   }, [])
@@ -122,14 +119,14 @@ export default function BookInfoScreen({ navigation, route }) {
               </View>
               <TouchableOpacity
                 onPress={() => { SaveLovers(book.data) }}>
-                <Ionicons name={'heart'} size={32} color={color} />
+                <Ionicons name={'heart'} size={32} color={buttonColor} />
               </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
       </SafeAreaView>
     </>)
-  }, [book, bookDownloadUrl])
+  }, [book, bookDownloadUrl, buttonColor])
 
   return murkup;
 }

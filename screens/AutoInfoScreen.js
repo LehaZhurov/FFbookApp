@@ -1,5 +1,5 @@
-import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
 import * as React from 'react';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useState, useEffect } from 'react';
 import { MiniBookPreview } from '../elements/Book/MiniBookPreview';
@@ -8,6 +8,7 @@ import { NotResponse } from '../elements/NotResponse';
 import { PagesPaginate } from '../elements/PagesPaginate';
 
 export default function AutoInfoScreen({ navigation, route }) {
+
   const [author, setAuthor] = useState({ data: { name: '', discription: '' } });
   const [pages, setPage] = useState();
   const [books, setBooks] = useState();

@@ -1,5 +1,5 @@
-import { FlatList } from 'react-native';
 import * as React from 'react';
+import { FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import { NotResponse } from '../elements/NotResponse';
 import { BookPreview } from '../elements/Book/BookPreview';
@@ -10,7 +10,6 @@ export default function NewBookScreen({ navigation }) {
 
   const [book, setBook] = useState({ data: [{ 'name': '', 'author': '' }] });
   const [murkup, setMarkup] = useState(<LoadScreen />);
-
 
   const getNewBook = async () => {
     let url = 'http://flibapi.tmweb.ru/get_new_book';

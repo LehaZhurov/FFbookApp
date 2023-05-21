@@ -1,11 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, Image } from 'react-native';
 import * as React from 'react';
+import { FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import { NotResponse } from '../elements/NotResponse';
 import { BookPreview } from '../elements/Book/BookPreview';
 import { LoadScreen } from '../elements/LoadScreen';
 import { PaginateControl } from '../elements/paginateControl';
+
 export default function PopularBookScreen({ navigation }) {
 
   const [book, setBook] = useState({ data: [{ 'name': '', 'author': '' }] });

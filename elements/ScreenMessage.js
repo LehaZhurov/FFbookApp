@@ -16,10 +16,12 @@ const styles = StyleSheet.create({
 
     block: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
+        alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10,
-        width: '100%'
+        width: '100%',
+        height: '100%',
     },
     container: {
         flex: 1,
@@ -27,6 +29,6 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 20,
     }
 });

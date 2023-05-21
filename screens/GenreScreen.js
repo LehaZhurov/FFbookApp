@@ -1,15 +1,17 @@
-import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
 import * as React from 'react';
-import { Text } from 'react-native-elements';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import { LoadScreen } from '../elements/LoadScreen';
 import { NotResponse } from '../elements/NotResponse';
+import { GenrePreview } from '../elements/Genre/GenrePreview';
 
-export default function GenreScreen({ navigation, route }) {
-  const [genre, setGenre] = useState({ data: [{ 'name': 'Загрузка' }] });
+export default function GenreScreen({ navigation }) {
+
+  const [genre, setGenre] = useState({ data: {} });
   const [murkup, setMurkup] = useState(<LoadScreen />);
 
-  const getGenre = () => {
+  const GetGenre = () => {
+    setMurkup(<LoadScreen />)
     let url = 'http://flibapi.tmweb.ru/get_genre';
     fetch(url, { method: 'GET', })
       .then((response) => response.json())
@@ -20,30 +22,24 @@ export default function GenreScreen({ navigation, route }) {
         setMurkup(<NotResponse />)
       });
   };
+
   useEffect(() => {
-    getGenre()
+    GetGenre()
   }, [])
 
   useEffect(() => {
-    setMurkup(
-      (<SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View>
-            <FlatList data={genre.data} renderItem={({ item }) => (
-              <><View style={styles.block}>
-                <Text style={styles.genreTitle} onPress={() => {
-                  navigation.navigate('Книги жанра', { 'g_code': item.g_href })
-                }} >{item.g_name}</Text>
-              </View></>
-            )} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>)
-    )
+    setMurkup(<SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View>
+          <FlatList data={genre.data} renderItem={({ item }) => (
+            <GenrePreview genre={item} navigation={navigation} />
+          )} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>)
   }, [genre])
-  return (
-    murkup
-  );
+
+  return murkup;
 }
 
 const styles = StyleSheet.create({
