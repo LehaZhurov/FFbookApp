@@ -1,116 +1,77 @@
-import { StyleSheet,View ,SafeAreaView ,ScrollView, StatusBar,FlatList,Image,ImageBackground} from 'react-native';
 import * as React from 'react';
-import { Button,Text } from 'react-native-elements';
-import {useState,useEffect} from 'react';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, FlatList } from 'react-native';
+import { useState, useEffect } from 'react';
+import { MiniBookPreview } from '../elements/Book/MiniBookPreview';
+import { LoadScreen } from '../elements/LoadScreen';
+import { NotResponse } from '../elements/NotResponse';
+import { PagesPaginate } from '../elements/PagesPaginate';
 
-export default function SeriesInfoScreen({navigation,route}) {    
-  const [book,setBook] = useState({data : [{'name' : 'Загрузка'}]});
+export default function SeriesInfoScreen({ navigation, route }) {
+
+  const [books, setBooks] = useState({ data: {} });
+  const [murkup, setMurkup] = useState(<LoadScreen />);
+  const [pages, setPage] = useState();
 
   const getSeriesBook = (s_code) => {
-    fetch('http://flibapi.tmweb.ru/get_book_serial/'+s_code+"/"+ 0, { method: 'GET',})
+    setMurkup(<LoadScreen />)
+    let url = 'http://flibapi.tmweb.ru/get_book_serial/' + s_code + "/" + 0;
+    fetch(url, { method: 'GET', })
       .then((response) => response.json())
       .then((responseJson) => {
-        for (let i = 0; i  < responseJson.length; i++) {
-            responseJson[i]['key'] = i;
-        }
-        setBook({
-          data : responseJson
-        })
+        setBooks({ data: responseJson })
       })
       .catch((error) => {
-        setBook({
-          data : {'name' : 'Нет интернет подключения'}
-        })
+        setMurkup(<NotResponse />)
       });
   };
+
   useEffect(() => {
     getSeriesBook(route.params.s_code)
-    console.log(book)
   }, [])
-  return (
-    <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.scrollView}>
-      <View style = {styles.book}>
-        <Text style = {styles.name}>Книги серии:{book.data.name}</Text>
-        <Text style = {styles.name}>{book.data.error}</Text>
-        <FlatList data={book.data} renderItem={({item})=> (
-          <View style = {styles.block}>
-            <ImageBackground
-              style={{ width: 100, height: 150 }}
-              source={{
-                uri:  'https://cm.author.today/content/2020/09/26/9a0b730762aa4398a8e8fc6f26168a83.jpg?width=265&height=400&mode=max'
-              }}
-            >
-              <Image
-                style={{ width: 100, height: 150 }}
-                source={{
-                  uri:  item.b_cover
-                }}
-                defaultSource = {{
-                  uri : 'https://flibusta.club/img/no_cover.jpg'
-                }}
-              />
-            </ImageBackground>
-            <Text style = {styles.author}>{item.b_name}</Text>
-            <Button
-              key = {item.key}
-              title = {'Книга'} 
-              onPress={()=>{
-                navigation.navigate('Аннотация', {'b_code' : item.b_code})
-              }}
-              buttonStyle ={styles.but}
-            />
-          </View>
-          )} />
-        <Text style = {styles.intro}>{book.data.annotation}</Text>
-        <Text style = {styles.author}>{book.data.year}</Text>
-      </View>
-    </ScrollView>
-  </SafeAreaView>
 
-  );
+  const paginate = (bk, page) => {
+    setMurkup(<LoadScreen />);
+    let num_bk = 50
+    let lenght = Object.keys(bk).length
+    let pg = lenght / num_bk
+    pg = pg.toFixed(0)
+    let pgarr = []
+    for (let i = 0; i < pg; i++) {
+      pgarr[i] = { i }
+    }
+    let start = num_bk * page
+    let end = page + 1
+    let slice = bk.slice(start, end * num_bk);
+    setBooks(slice)
+    if (pg >= 0) {
+      setPage(pgarr)
+    }
+  }
+
+  useEffect(() => {
+    setMurkup(<>
+      <SafeAreaView style={styles.container}>
+        <ScrollView >
+          <View style={styles.books}>
+            <FlatList data={books.data} renderItem={({ item }) => (
+              <MiniBookPreview book={item} navigation={navigation} />
+            )} />
+            <PagesPaginate collection={books.data} paginator={paginate} pages={pages} />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>)
+  }, [books])
+
+  return murkup;
 }
 
 const styles = StyleSheet.create({
-  img:{
-    //   height : ratio, 
-    //   width: "100%",
-      resizeMode: 'contain'
-        
-  },
-  book:{
-      padding: 20 
-  },
-  block:{
-    flex:1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop:10,
-    width:'100%'
-  },
-  name:{
-      fontSize:30,
-      marginRight:20
-  },
-  author:{
-    fontSize:15,
-    margin: 5,
-    flex: 1, 
-    flexWrap: 'wrap'
+  books: {
+    padding: 20
   },
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
   },
-  intro:{
-    fontSize:15,
-    padding:5
-  }
-  ,
-  scrollView: {
-    // backgroundColor: 'pink',
-  },
-  but:{
-    backgroundColor:'#008d83',
-  }
 });

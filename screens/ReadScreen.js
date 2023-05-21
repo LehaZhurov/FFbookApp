@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop:10
   },
-  name:{
+  h1:{
       fontSize:30,
       marginRight:20
   },
-  author:{
+  span:{
       fontSize:15,
       // textAlign: "center",
       marginVertical:10
